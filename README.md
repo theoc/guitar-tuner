@@ -1,4 +1,5 @@
 # Guitar Tuner for iOS
+Updated to work with Swift 3
 
 ![Screenshot of Guitar Tuner app for iOS](Screenshot.png)
 
