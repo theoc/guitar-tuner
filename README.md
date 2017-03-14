@@ -1,7 +1,5 @@
 # Guitar Tuner for iOS
 
-
-
 ![Screenshot of Guitar Tuner app for iOS](Screenshot.png)
 
 ## Requirements
@@ -27,8 +25,8 @@ the following two commands.
 ## Original Author
 
 Tim van Elsloo, [elsl.ooo](https://elsl.ooo)
-Originally a result of a four-part series on Fourier transform at:
-[elsl.ooo](https://elsl.ooo/2016/02/12/digital-tuner-ios-swift.html).
+
+Originally a result of a [four-part series on Fourier transform](https://elsl.ooo/2016/02/12/digital-tuner-ios-swift.html).
 
 ## License
 
