@@ -34,7 +34,7 @@ class AudioPlot: AKAudioPlot {
 
     var time:          Double = 0.0
 
-    override func bufferWithCsound(cs: CsoundObj) -> NSData {
+    override func buffer(withCsound cs: CsoundObj) -> Data {
         let length    = Int(AKSettings.shared().numberOfChannels) *
                         Int(AKSettings.shared().samplesPerControlPeriod) * 4
         let num       = length / 4
@@ -73,7 +73,7 @@ class AudioPlot: AKAudioPlot {
          * loses the necessary precision. */
         time = fmod(time, 1.0)
 
-        return NSData(bytesNoCopy: floats, length: length)
+        return Data(bytesNoCopy: UnsafeMutablePointer<UInt8>(floats), count: length, deallocator: .free)
     }
 }
 
@@ -94,16 +94,16 @@ class PlotView: UIView {
         }
     }
 
-    private let plots = (0 ... 4).map { _ in AudioPlot() }
+    fileprivate let plots = (0 ... 4).map { _ in AudioPlot() }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
         /* Setup the all plots. */
         for i in 0 ... 4 {
-            plots[i].autoresizingMask = [ .FlexibleWidth, .FlexibleHeight ]
-            plots[i].backgroundColor  = .clearColor()
-            plots[i].lineColor        = .whiteColor()
+            plots[i].autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
+            plots[i].backgroundColor  = .clear
+            plots[i].lineColor        = .white
             plots[i].lineWidth        = 1.0
             plots[i].frequency        = 0.0
             plots[i].amplifier        = abs(1.0 - Double(i) * 0.4) * (i % 2 == 0 ? 1.0 : -1.0)
