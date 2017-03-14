@@ -38,8 +38,7 @@ class AudioPlot: AKAudioPlot {
         let length    = Int(AKSettings.shared().numberOfChannels) *
                         Int(AKSettings.shared().samplesPerControlPeriod) * 4
         let num       = length / 4
-        var floats = [Float]()
-        //UnsafeMutableRawPointer.allocate(bytes: length*MemoryLayout<Float>.stride, alignedTo: MemoryLayout<Float>.alignment)
+        let floats = UnsafeMutablePointer<Float>.allocate(capacity:length)
 
         /* The phase and amplitude are different for each line to get a nice
          * gimmick. */
@@ -53,9 +52,9 @@ class AudioPlot: AKAudioPlot {
             /* It is incredibly important that `time` and `phase` aren't
              * multiplied with the frequency or else it will bump at each
              * frequency change. */
-            var t = (time + Double(i) / Double(num) * self.frequency + phase)
+            var t = time + phase + (Double(i) / Double(num) * self.frequency)
 
-            floats.append(Float(sin(t * 2 * 3.14)))
+            floats[i] = Float(sin(t * 2 * 3.14))
 
             /* It is multiplied with a "regular" 0.5 Hz sine to get both ends
              * to fade out nicely. It's sort of a simplistic window function. */
@@ -74,7 +73,7 @@ class AudioPlot: AKAudioPlot {
          * loses the necessary precision. */
         time = fmod(time, 1.0)
 
-        return NSData(bytesNoCopy: &floats, length: length)
+        return NSData(bytesNoCopy: floats, length: length)
     }
 }
 
@@ -100,7 +99,7 @@ class PlotView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        /* Setup the all plots. */
+        /* Setup all the plots. */
         for i in 0 ... 4 {
             plots[i].autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
             plots[i].backgroundColor  = .clear
