@@ -34,11 +34,12 @@ class AudioPlot: AKAudioPlot {
 
     var time:          Double = 0.0
 
-    override func buffer(withCsound cs: CsoundObj) -> Data {
+    func bufferWithCsound(cs: CsoundObj) -> NSData {
         let length    = Int(AKSettings.shared().numberOfChannels) *
                         Int(AKSettings.shared().samplesPerControlPeriod) * 4
         let num       = length / 4
-        let floats    = UnsafeMutablePointer<Float>(malloc(length))
+        var floats = [Float]()
+        //UnsafeMutableRawPointer.allocate(bytes: length*MemoryLayout<Float>.stride, alignedTo: MemoryLayout<Float>.alignment)
 
         /* The phase and amplitude are different for each line to get a nice
          * gimmick. */
@@ -54,7 +55,7 @@ class AudioPlot: AKAudioPlot {
              * frequency change. */
             var t = (time + Double(i) / Double(num) * self.frequency + phase)
 
-            floats[i] = Float(sin(t * 2 * 3.14))
+            floats.append(Float(sin(t * 2 * 3.14)))
 
             /* It is multiplied with a "regular" 0.5 Hz sine to get both ends
              * to fade out nicely. It's sort of a simplistic window function. */
@@ -73,7 +74,7 @@ class AudioPlot: AKAudioPlot {
          * loses the necessary precision. */
         time = fmod(time, 1.0)
 
-        return Data(bytesNoCopy: UnsafeMutablePointer<UInt8>(floats), count: length, deallocator: .free)
+        return NSData(bytesNoCopy: &floats, length: length)
     }
 }
 
@@ -94,7 +95,7 @@ class PlotView: UIView {
         }
     }
 
-    fileprivate let plots = (0 ... 4).map { _ in AudioPlot() }
+    private let plots = (0 ... 4).map { _ in AudioPlot() }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
