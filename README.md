@@ -5,7 +5,7 @@ Updated to work with Swift 3
 
 ## Requirements
 
-- [AudioKit](http://audiokit.io) 2.x
+- [AudioKit](http://audiokit.io)
 - ARC
 - [CocoaPods](https://cocoapods.org)
 - Swift 3.0
