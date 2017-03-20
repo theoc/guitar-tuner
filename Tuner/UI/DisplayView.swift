@@ -26,18 +26,6 @@ class DisplayView: UIView {
     fileprivate let gradientLayer = CAGradientLayer()
     fileprivate let plotView =      PlotView()
     
-    var amplitude: Double = 0.0 {
-        didSet {
-            plotView.amplitude = amplitude
-        }
-    }
-    
-    var frequency: Double = 0.0 {
-        didSet {
-            plotView.frequency = frequency
-        }
-    }
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
 

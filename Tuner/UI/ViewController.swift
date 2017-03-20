@@ -62,8 +62,8 @@ class ViewController: UIViewController, TunerDelegate {
     func tunerDidMeasurePitch(_ pitch: Pitch, withDistance distance: Double,
                               amplitude: Double) {
         /* Scale the amplitude to make it look more dramatic. */
-        displayView.amplitude = min(1.0, amplitude * 25.0)
-        displayView.frequency = pitch.frequency
+        /*displayView.amplitude = min(1.0, amplitude * 25.0)
+        displayView.frequency = pitch.frequency*/
 
         if amplitude < 0.01 {
             return
